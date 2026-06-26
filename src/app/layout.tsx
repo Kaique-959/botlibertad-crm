@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Sidebar from '@/components/Sidebar'
 import ToasterProvider from '@/components/ToasterProvider'
+import { SidebarProvider } from '@/lib/sidebar-context'
+import { MenuToggle } from '@/components/MenuToggle'
 
 export const metadata: Metadata = {
   title: 'BotLibertad CRM',
@@ -17,14 +19,17 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <ToasterProvider />
-        <div className="flex min-h-screen bg-gray-50">
-          <Sidebar />
-          <main className="flex-1 min-w-0">
-            <div className="p-6 lg:p-10 max-w-7xl mx-auto">
-              {children}
-            </div>
-          </main>
-        </div>
+        <SidebarProvider>
+          <div className="flex min-h-screen bg-gray-50">
+            <Sidebar />
+            <main className="flex-1 min-w-0">
+              <MenuToggle />
+              <div className="p-6 lg:p-10 max-w-7xl mx-auto">
+                {children}
+              </div>
+            </main>
+          </div>
+        </SidebarProvider>
       </body>
     </html>
   )
