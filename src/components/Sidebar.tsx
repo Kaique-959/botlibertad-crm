@@ -11,7 +11,6 @@ import {
   BarChart3,
   LogOut,
   Stethoscope,
-  X,
 } from 'lucide-react'
 import { useSidebar } from '@/lib/sidebar-context'
 
@@ -63,13 +62,6 @@ export default function Sidebar() {
               </p>
             </div>
           </div>
-          <button
-            className="lg:hidden p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-            onClick={() => setOpen(false)}
-            aria-label="Fechar menu"
-          >
-            <X size={18} className="text-gray-500" />
-          </button>
         </div>
 
         <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto min-w-64">
