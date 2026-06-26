@@ -12,7 +12,8 @@ export function MenuToggle() {
 
   return (
     <button
-      className="lg:hidden fixed top-4 left-4 z-50 bg-white p-2.5 rounded-xl shadow-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+      className="lg:hidden absolute top-4 z-50 bg-white p-2.5 rounded-xl shadow-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300"
+      style={{ left: open ? '17rem' : '1rem' }}
       onClick={() => setOpen(!open)}
       aria-label={open ? 'Fechar menu' : 'Abrir menu'}
     >

@@ -6,7 +6,7 @@ import { SidebarProvider } from '@/lib/sidebar-context'
 import { MenuToggle } from '@/components/MenuToggle'
 
 export const metadata: Metadata = {
-  title: 'BotLibertad CRM',
+  title: 'CRM Instituto Libertad',
   description: 'Sistema de gestão para clínica de audiologia',
 }
 
@@ -20,11 +20,11 @@ export default function RootLayout({
       <body>
         <ToasterProvider />
         <SidebarProvider>
-          <div className="flex min-h-screen bg-gray-50">
+          <div className="flex min-h-screen bg-gray-50 relative">
             <Sidebar />
+            <MenuToggle />
             <main className="flex-1 min-w-0">
-              <MenuToggle />
-              <div className="p-6 lg:p-10 max-w-7xl mx-auto">
+              <div className="pt-16 lg:pt-0 p-6 lg:p-10 max-w-7xl mx-auto">
                 {children}
               </div>
             </main>
