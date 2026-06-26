@@ -28,37 +28,31 @@ export default function AgendaPage() {
     setLoading(false)
   }
 
-  useEffect(() => {
-    loadAtendimentos()
-  }, [])
+  useEffect(() => { loadAtendimentos() }, [])
 
   const selectedDate = date instanceof Date ? date : new Date()
 
   const agendamentosDoDia = atendimentos.filter((a) => {
     if (!a.data_agendamento) return false
     const d = new Date(a.data_agendamento)
-    return (
-      d.getDate() === selectedDate.getDate() &&
+    return d.getDate() === selectedDate.getDate() &&
       d.getMonth() === selectedDate.getMonth() &&
       d.getFullYear() === selectedDate.getFullYear()
-    )
   })
 
   function tileContent({ date: tileDate }: { date: Date }) {
     const count = atendimentos.filter((a) => {
       if (!a.data_agendamento) return false
       const d = new Date(a.data_agendamento)
-      return (
-        d.getDate() === tileDate.getDate() &&
+      return d.getDate() === tileDate.getDate() &&
         d.getMonth() === tileDate.getMonth() &&
         d.getFullYear() === tileDate.getFullYear()
-      )
     }).length
 
     if (count > 0) {
       return (
-        <div className="flex justify-center mt-1">
-          <span className="bg-[#1a2744] text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+        <div className="flex justify-center mt-0.5">
+          <span className="bg-[#0f3b5e] text-white text-[10px] font-bold rounded-full w-4.5 h-4.5 flex items-center justify-center" style={{ width: '18px', height: '18px' }}>
             {count}
           </span>
         </div>
@@ -68,30 +62,33 @@ export default function AgendaPage() {
   }
 
   const examColors: Record<string, string> = {
-    'Audiometria': 'border-l-blue-400',
-    'Imitanciometria': 'border-l-green-400',
-    'PAC': 'border-l-purple-400',
-    'P300': 'border-l-orange-400',
-    'BERA': 'border-l-red-400',
-    'Otoemissões': 'border-l-teal-400',
-    'Avaliação Neuropsicológica': 'border-l-pink-400',
-    'Aparelho Auditivo': 'border-l-yellow-400',
-    'TAAC': 'border-l-indigo-400',
+    'Audiometria': 'border-l-[#3b82f6]',
+    'Imitanciometria': 'border-l-[#10b981]',
+    'PAC': 'border-l-[#8b5cf6]',
+    'P300': 'border-l-[#f97316]',
+    'BERA': 'border-l-[#ef4444]',
+    'Otoemissões': 'border-l-[#14b8a6]',
+    'Avaliação Neuropsicológica': 'border-l-[#ec4899]',
+    'Aparelho Auditivo': 'border-l-[#f59e0b]',
+    'TAAC': 'border-l-[#6366f1]',
   }
 
   function getBorderColor(exame: string): string {
     for (const [key, color] of Object.entries(examColors)) {
       if (exame.includes(key)) return color
     }
-    return 'border-l-gray-400'
+    return 'border-l-[#9ca3af]'
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-[#1a2744]">Agenda</h1>
+    <div className="space-y-7">
+      <div>
+        <h1 className="page-title">Agenda</h1>
+        <p className="text-[#6b7280] text-sm mt-1">Gerencie os agendamentos da clínica</p>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div className="card p-6">
           <Calendar
             onChange={setDate}
             value={date}
@@ -103,41 +100,35 @@ export default function AgendaPage() {
           />
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-          <h2 className="text-lg font-semibold text-[#1a2744] mb-4">
-            Agendamentos — {selectedDate.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })}
+        <div className="card p-6">
+          <h2 className="section-title mb-5">
+            {selectedDate.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
           </h2>
 
           {loading ? (
-            <p className="text-gray-400 text-sm py-8 text-center">Carregando...</p>
+            <div className="flex items-center justify-center py-12">
+              <div className="w-5 h-5 border-2 border-[#0f3b5e] border-t-transparent rounded-full animate-spin" />
+            </div>
           ) : agendamentosDoDia.length === 0 ? (
-            <p className="text-gray-400 text-sm py-8 text-center">Nenhum agendamento para este dia</p>
+            <div className="text-center py-12 text-[#9ca3af] text-sm">Nenhum agendamento para este dia</div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {agendamentosDoDia.map((a) => (
-                <Link
-                  key={a.id}
-                  href={`/pacientes/${a.paciente_id}`}
-                  className={`block p-4 bg-gray-50 rounded-lg border-l-4 ${getBorderColor(a.tipo_exame)} hover:bg-gray-100 transition-colors`}
-                >
+                <Link key={a.id} href={`/pacientes/${a.paciente_id}`}
+                  className={`block p-4 bg-[#faf9f7] rounded-xl border-l-4 ${getBorderColor(a.tipo_exame)} hover:bg-white hover:shadow-sm transition-all`}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-[#1a2744]">
-                        {a.pacientes?.nome || 'Paciente'}
-                      </p>
-                      <p className="text-xs text-gray-500 mt-0.5">{a.tipo_exame}</p>
+                      <p className="text-sm font-medium text-[#0f3b5e]">{a.pacientes?.nome || 'Paciente'}</p>
+                      <p className="text-xs text-[#6b7280] mt-0.5">{a.tipo_exame}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-[#1a2744]">
+                      <p className="text-sm font-medium text-[#0f3b5e]">
                         {a.data_agendamento
-                          ? new Date(a.data_agendamento).toLocaleTimeString('pt-BR', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })
+                          ? new Date(a.data_agendamento).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
                           : '—'}
                       </p>
                       {a.pacientes?.whatsapp && (
-                        <p className="text-xs text-gray-400">{a.pacientes.whatsapp}</p>
+                        <p className="text-xs text-[#9ca3af]">{a.pacientes.whatsapp}</p>
                       )}
                     </div>
                   </div>

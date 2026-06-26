@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { getSupabaseBrowser } from '@/lib/supabase'
 import { Stethoscope } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -10,15 +9,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
 
-    const supabase = getSupabaseBrowser()
-
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await getSupabaseBrowser().auth.signInWithPassword({
       email,
       password,
     })
@@ -34,20 +30,24 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-          <div className="flex flex-col items-center mb-8">
-            <div className="bg-[#1a2744] p-3 rounded-xl mb-4">
-              <Stethoscope size={32} className="text-green-400" />
-            </div>
-            <h1 className="text-2xl font-bold text-[#1a2744]">BotLibertad</h1>
-            <p className="text-sm text-gray-500 mt-1">CRM da Clínica</p>
+    <div className="min-h-screen flex items-center justify-center bg-[#faf9f7] p-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0f3b5e] rounded-2xl mb-5 shadow-lg shadow-[#0f3b5e]/10">
+            <Stethoscope size={32} className="text-[#2dd4bf]" />
           </div>
+          <h1 className="text-3xl text-[#0f3b5e]" style={{ fontFamily: "'DM Serif Display', serif" }}>
+            BotLibertad
+          </h1>
+          <p className="text-[15px] text-[#6b7280] mt-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            CRM da Clínica
+          </p>
+        </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+        <div className="bg-white rounded-2xl border border-[#eae7e2] p-8 shadow-sm">
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#1a1a2e] mb-1.5">
                 Email
               </label>
               <input
@@ -55,13 +55,13 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2744] focus:border-transparent"
+                className="input-field"
                 placeholder="seu@email.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-[#1a1a2e] mb-1.5">
                 Senha
               </label>
               <input
@@ -69,7 +69,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2744] focus:border-transparent"
+                className="input-field"
                 placeholder="••••••••"
               />
             </div>
@@ -77,12 +77,16 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#1a2744] text-white py-3 rounded-lg font-medium text-sm hover:bg-[#2a3f66] transition-colors disabled:opacity-50"
+              className="btn-primary w-full py-3 text-base"
             >
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
         </div>
+
+        <p className="text-center text-xs text-[#9ca3af] mt-6">
+          Clínica de Fonoaudiologia — Dra. Libertad Ramirez
+        </p>
       </div>
     </div>
   )

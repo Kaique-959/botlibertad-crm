@@ -12,21 +12,18 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend,
 } from 'recharts'
 import { Download } from 'lucide-react'
 import { EXAMES } from '@/lib/types'
 
-const COLORS = ['#1a2744', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316', '#ec4899', '#14b8a6', '#6b7280']
+const COLORS = ['#0f3b5e', '#2dd4bf', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316', '#ec4899', '#14b8a6', '#6b7280']
 
 export default function RelatoriosPage() {
   const [periodo, setPeriodo] = useState('mes')
   const [atendimentos, setAtendimentos] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadData()
-  }, [periodo])
+  useEffect(() => { loadData() }, [periodo])
 
   async function loadData() {
     setLoading(true)
@@ -51,7 +48,7 @@ export default function RelatoriosPage() {
   }
 
   const examesData = EXAMES.map((e) => ({
-    name: e.nome.length > 20 ? e.nome.slice(0, 20) + '...' : e.nome,
+    name: e.nome.length > 22 ? e.nome.slice(0, 22) + '…' : e.nome,
     value: atendimentos.filter((a) => a.tipo_exame === e.nome).length,
   })).filter((e) => e.value > 0)
 
@@ -65,9 +62,7 @@ export default function RelatoriosPage() {
   const total = atendimentos.length
   const realizados = atendimentos.filter((a) => a.status === 'realizado').length
   const taxaConversao = total > 0 ? ((realizados / total) * 100).toFixed(1) : '0'
-  const faturamento = atendimentos
-    .filter((a) => a.status === 'realizado')
-    .reduce((acc, a) => acc + (a.valor || 0), 0)
+  const faturamento = atendimentos.filter((a) => a.status === 'realizado').reduce((acc, a) => acc + (a.valor || 0), 0)
 
   function exportCSV() {
     const headers = ['Paciente ID', 'Tipo Exame', 'Status', 'Data Agendamento', 'Valor', 'Origem']
@@ -85,76 +80,70 @@ export default function RelatoriosPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#1a2744]">Relatórios</h1>
+        <div>
+          <h1 className="page-title">Relatórios</h1>
+          <p className="text-[#6b7280] text-sm mt-1">Métricas e desempenho da clínica</p>
+        </div>
         <div className="flex items-center gap-3">
-          <select
-            value={periodo}
-            onChange={(e) => setPeriodo(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2744]"
-          >
+          <select value={periodo} onChange={(e) => setPeriodo(e.target.value)} className="input-field w-40">
             <option value="mes">Este Mês</option>
             <option value="trimestre">Último Trimestre</option>
             <option value="ano">Este Ano</option>
             <option value="todo">Todo Período</option>
           </select>
-          <button
-            onClick={exportCSV}
-            className="border border-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-50 transition-colors"
-          >
+          <button onClick={exportCSV} className="btn-secondary flex items-center gap-2">
             <Download size={16} />
-            Exportar CSV
+            CSV
           </button>
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-400">Carregando...</div>
+        <div className="flex items-center justify-center py-20">
+          <div className="w-6 h-6 border-2 border-[#0f3b5e] border-t-transparent rounded-full animate-spin" />
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm text-gray-500 font-medium">Total de Atendimentos</p>
-              <p className="text-2xl font-bold text-[#1a2744] mt-1">{total}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="card p-6">
+              <p className="stat-label">Total de Atendimentos</p>
+              <p className="stat-value mt-1">{total}</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm text-gray-500 font-medium">Realizados</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">{realizados}</p>
+            <div className="card p-6">
+              <p className="stat-label">Realizados</p>
+              <p className="stat-value mt-1 text-[#10b981]">{realizados}</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm text-gray-500 font-medium">Taxa de Conversão</p>
-              <p className="text-2xl font-bold text-blue-600 mt-1">{taxaConversao}%</p>
+            <div className="card p-6">
+              <p className="stat-label">Taxa de Conversão</p>
+              <p className="stat-value mt-1 text-[#3b82f6]">{taxaConversao}%</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <p className="text-sm text-gray-500 font-medium">Faturamento</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">R$ {faturamento.toFixed(2)}</p>
+            <div className="card p-6">
+              <p className="stat-label">Faturamento</p>
+              <p className="stat-value mt-1 text-[#10b981]">R$ {Number(faturamento).toFixed(2)}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <h2 className="text-lg font-semibold text-[#1a2744] mb-4">
-                Atendimentos por Tipo de Exame
-              </h2>
+            <div className="card p-6">
+              <h2 className="section-title mb-5">Atendimentos por Tipo de Exame</h2>
               {examesData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={examesData}>
-                    <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#1a2744" radius={[4, 4, 0, 0]} />
+                    <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#6b7280' }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 11, fill: '#6b7280' }} axisLine={false} tickLine={false} />
+                    <Tooltip contentStyle={{ borderRadius: '10px', border: '1px solid #eae7e2', boxShadow: '0 4px 12px rgba(15,59,94,0.06)', fontSize: '13px' }} />
+                    <Bar dataKey="value" fill="#0f3b5e" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <p className="text-gray-400 text-sm py-8 text-center">Sem dados no período</p>
+                <div className="flex items-center justify-center h-[300px] text-[#9ca3af] text-sm">Sem dados no período</div>
               )}
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-              <h2 className="text-lg font-semibold text-[#1a2744] mb-4">
-                Distribuição por Status
-              </h2>
+            <div className="card p-6">
+              <h2 className="section-title mb-5">Distribuição por Status</h2>
               {statusData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
@@ -171,11 +160,11 @@ export default function RelatoriosPage() {
                         <Cell key={index} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip contentStyle={{ borderRadius: '10px', border: '1px solid #eae7e2', fontSize: '13px' }} />
                   </PieChart>
                 </ResponsiveContainer>
               ) : (
-                <p className="text-gray-400 text-sm py-8 text-center">Sem dados no período</p>
+                <div className="flex items-center justify-center h-[300px] text-[#9ca3af] text-sm">Sem dados no período</div>
               )}
             </div>
           </div>

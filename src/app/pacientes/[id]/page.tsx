@@ -7,14 +7,13 @@ import {
   Phone,
   MessageCircle,
   Mail,
-  Calendar,
   Plus,
   Save,
   ArrowLeft,
   Stethoscope,
-  DollarSign,
   CheckCircle,
-  XCircle,
+  Calendar,
+  User,
 } from 'lucide-react'
 import { EXAMES } from '@/lib/types'
 import toast from 'react-hot-toast'
@@ -125,142 +124,158 @@ export default function PerfilPacientePage() {
   }
 
   if (loading) {
-    return <div className="text-center py-12 text-gray-400">Carregando...</div>
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="w-6 h-6 border-2 border-[#0f3b5e] border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
   }
 
   if (!paciente) {
-    return <div className="text-center py-12 text-gray-400">Paciente não encontrado</div>
+    return (
+      <div className="card p-12 text-center">
+        <User size={40} className="mx-auto text-[#d4d0c8] mb-3" />
+        <p className="text-[#6b7280]">Paciente não encontrado</p>
+      </div>
+    )
+  }
+
+  const statusBadge = (s: string) => {
+    const map: Record<string, string> = {
+      lead: 'badge badge-lead',
+      agendado: 'badge badge-agendado',
+      realizado: 'badge badge-realizado',
+      cancelado: 'badge badge-cancelado',
+    }
+    return map[s] || 'badge badge-lead'
+  }
+
+  const tipoBadge = (t: string) => {
+    const map: Record<string, string> = {
+      mensagem: 'bg-[#dbeafe] text-[#1e40af]',
+      ligacao: 'bg-[#ede9fe] text-[#5b21b6]',
+      agendamento: 'bg-[#d1fae5] text-[#065f46]',
+      retorno: 'bg-[#fef3c7] text-[#92400e]',
+    }
+    return map[t] || 'bg-gray-100 text-gray-700'
   }
 
   return (
     <div className="space-y-6 max-w-4xl">
       <button
         onClick={() => router.back()}
-        className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#1a2744] transition-colors"
+        className="flex items-center gap-2 text-sm text-[#6b7280] hover:text-[#0f3b5e] transition-colors"
       >
         <ArrowLeft size={16} />
         Voltar
       </button>
 
-      <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-[#1a2744]">{paciente.nome}</h1>
-            <div className="flex flex-wrap gap-3 mt-2">
-              {paciente.whatsapp && (
-                <a
-                  href={`https://wa.me/${paciente.whatsapp.replace(/\D/g, '')}`}
-                  target="_blank"
-                  className="flex items-center gap-1.5 text-sm text-green-600 hover:text-green-700"
-                >
-                  <MessageCircle size={14} /> {paciente.whatsapp}
-                </a>
-              )}
-              {paciente.telefone && (
-                <a href={`tel:${paciente.telefone}`} className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700">
-                  <Phone size={14} /> {paciente.telefone}
-                </a>
-              )}
-              {paciente.email && (
-                <span className="flex items-center gap-1.5 text-sm text-gray-500">
-                  <Mail size={14} /> {paciente.email}
-                </span>
-              )}
+      <div className="card p-7">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 bg-[#0f3b5e]/5 rounded-2xl flex items-center justify-center">
+              <User size={24} className="text-[#0f3b5e]" />
+            </div>
+            <div>
+              <h1 className="text-2xl" style={{ fontFamily: "'DM Serif Display', serif", color: '#0f3b5e' }}>
+                {paciente.nome}
+              </h1>
+              <div className="flex flex-wrap gap-3 mt-1.5">
+                {paciente.whatsapp && (
+                  <a href={`https://wa.me/${paciente.whatsapp.replace(/\D/g, '')}`} target="_blank"
+                    className="flex items-center gap-1.5 text-sm text-[#10b981] hover:text-[#059669] transition-colors">
+                    <MessageCircle size={14} /> {paciente.whatsapp}
+                  </a>
+                )}
+                {paciente.telefone && (
+                  <a href={`tel:${paciente.telefone}`}
+                    className="flex items-center gap-1.5 text-sm text-[#0f3b5e] hover:text-[#1a5a8a] transition-colors">
+                    <Phone size={14} /> {paciente.telefone}
+                  </a>
+                )}
+                {paciente.email && (
+                  <span className="flex items-center gap-1.5 text-sm text-[#6b7280]">
+                    <Mail size={14} /> {paciente.email}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setShowAtendimento(true)}
-              className="bg-[#1a2744] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-[#2a3f66] transition-colors"
-            >
+          <div className="flex gap-2.5">
+            <button onClick={() => setShowAtendimento(true)} className="btn-primary flex items-center gap-2">
               <Plus size={16} />
-              Novo Atendimento
+              Atendimento
             </button>
-            <button
-              onClick={() => setShowInteracao(true)}
-              className="border border-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-gray-50 transition-colors"
-            >
+            <button onClick={() => setShowInteracao(true)} className="btn-secondary flex items-center gap-2">
               <Plus size={16} />
-              Nova Interação
+              Interação
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 mt-7 pt-6 border-t border-[#eae7e2]">
           <div>
-            <p className="text-xs text-gray-400">CPF</p>
-            <p className="text-sm font-medium text-[#1a2744]">{paciente.cpf || '—'}</p>
+            <p className="text-xs text-[#9ca3af] uppercase tracking-wider font-medium">CPF</p>
+            <p className="text-sm font-medium text-[#1a1a2e] mt-1">{paciente.cpf || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400">Data de Nascimento</p>
-            <p className="text-sm font-medium text-[#1a2744]">
-              {paciente.data_nascimento
-                ? new Date(paciente.data_nascimento).toLocaleDateString('pt-BR')
-                : '—'}
+            <p className="text-xs text-[#9ca3af] uppercase tracking-wider font-medium">Nascimento</p>
+            <p className="text-sm font-medium text-[#1a1a2e] mt-1">
+              {paciente.data_nascimento ? new Date(paciente.data_nascimento).toLocaleDateString('pt-BR') : '—'}
             </p>
           </div>
           <div>
-            <p className="text-xs text-gray-400">Convênio</p>
-            <p className="text-sm font-medium text-[#1a2744]">{paciente.convenio || '—'}</p>
+            <p className="text-xs text-[#9ca3af] uppercase tracking-wider font-medium">Convênio</p>
+            <p className="text-sm font-medium text-[#1a1a2e] mt-1">{paciente.convenio || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400">Como Conheceu</p>
-            <p className="text-sm font-medium text-[#1a2744]">{paciente.como_conheceu || '—'}</p>
+            <p className="text-xs text-[#9ca3af] uppercase tracking-wider font-medium">Origem</p>
+            <p className="text-sm font-medium text-[#1a1a2e] mt-1">{paciente.como_conheceu || '—'}</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+      <div className="card p-7">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-[#1a2744]">Observações</h2>
-          <button
-            onClick={handleSaveObservacoes}
-            disabled={saving}
-            className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
-          >
+          <h2 className="section-title">Observações</h2>
+          <button onClick={handleSaveObservacoes} disabled={saving}
+            className="text-sm text-[#0f3b5e] hover:text-[#1a5a8a] flex items-center gap-1.5 font-medium transition-colors">
             <Save size={14} />
-            {saving ? 'Salvando...' : 'Salvar'}
+            {saving ? 'Salvando…' : 'Salvar'}
           </button>
         </div>
         <textarea
           value={observacoes}
           onChange={(e) => setObservacoes(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2744] resize-none"
+          className="input-field resize-none"
           rows={3}
-          placeholder="Adicione observações sobre o paciente..."
+          placeholder="Adicione observações sobre o paciente…"
         />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#1a2744] mb-4">Atendimentos</h2>
+      <div className="card p-7">
+        <h2 className="section-title mb-5">Atendimentos</h2>
         {atendimentos.length === 0 ? (
-          <p className="text-gray-400 text-sm py-4 text-center">Nenhum atendimento registrado</p>
+          <div className="text-center py-8 text-[#9ca3af] text-sm">Nenhum atendimento registrado</div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {atendimentos.map((a) => (
-              <div key={a.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Stethoscope size={16} className="text-gray-400" />
+              <div key={a.id} className="flex items-center justify-between p-4 bg-[#faf9f7] rounded-xl">
+                <div className="flex items-center gap-3.5">
+                  <div className="p-2 bg-[#0f3b5e]/5 rounded-xl">
+                    <Stethoscope size={16} className="text-[#0f3b5e]" />
+                  </div>
                   <div>
-                    <p className="text-sm font-medium text-[#1a2744]">{a.tipo_exame}</p>
-                    <p className="text-xs text-gray-400">
-                      {a.data_agendamento
-                        ? new Date(a.data_agendamento).toLocaleDateString('pt-BR')
-                        : 'Sem data'}
-                      {a.valor && ` • R$ ${a.valor.toFixed(2)}`}
+                    <p className="text-sm font-medium text-[#1a1a2e]">{a.tipo_exame}</p>
+                    <p className="text-xs text-[#6b7280] mt-0.5">
+                      {a.data_agendamento ? new Date(a.data_agendamento).toLocaleDateString('pt-BR') : 'Sem data'}
+                      {a.valor && ` • R$ ${Number(a.valor).toFixed(2)}`}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  {a.pago && <CheckCircle size={14} className="text-green-500" />}
-                  <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                    a.status === 'lead' ? 'bg-yellow-100 text-yellow-700' :
-                    a.status === 'agendado' ? 'bg-blue-100 text-blue-700' :
-                    a.status === 'realizado' ? 'bg-green-100 text-green-700' :
-                    'bg-gray-100 text-gray-700'
-                  }`}>
-                    {a.status}
-                  </span>
+                <div className="flex items-center gap-2.5">
+                  {a.pago && <CheckCircle size={16} className="text-[#10b981]" />}
+                  <span className={statusBadge(a.status)}>{a.status}</span>
                 </div>
               </div>
             ))}
@@ -268,34 +283,27 @@ export default function PerfilPacientePage() {
         )}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#1a2744] mb-4">Timeline de Interações</h2>
+      <div className="card p-7">
+        <h2 className="section-title mb-5">Timeline de Interações</h2>
         {interacoes.length === 0 ? (
-          <p className="text-gray-400 text-sm py-4 text-center">Nenhuma interação registrada</p>
+          <div className="text-center py-8 text-[#9ca3af] text-sm">Nenhuma interação registrada</div>
         ) : (
-          <div className="relative pl-6 space-y-4">
-            <div className="absolute left-2.5 top-0 bottom-0 w-px bg-gray-200" />
+          <div className="relative pl-8 space-y-5">
+            <div className="absolute left-3 top-1 bottom-0 w-px bg-[#eae7e2]" />
             {interacoes.map((i) => (
               <div key={i.id} className="relative">
-                <div className="absolute -left-4 top-1 w-3 h-3 rounded-full bg-[#1a2744] border-2 border-white" />
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                      i.tipo === 'mensagem' ? 'bg-blue-100 text-blue-700' :
-                      i.tipo === 'ligacao' ? 'bg-purple-100 text-purple-700' :
-                      i.tipo === 'agendamento' ? 'bg-green-100 text-green-700' :
-                      'bg-orange-100 text-orange-700'
-                    }`}>
+                <div className="absolute -left-5 top-1.5 w-2.5 h-2.5 rounded-full bg-[#0f3b5e] border-2 border-white shadow-sm" />
+                <div className="bg-[#faf9f7] rounded-xl p-4">
+                  <div className="flex items-center gap-2.5 mb-1.5">
+                    <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${tipoBadge(i.tipo)}`}>
                       {i.tipo}
                     </span>
-                    <span className="text-xs text-gray-400">
-                      via {i.canal}
-                    </span>
-                    <span className="text-xs text-gray-400 ml-auto">
+                    <span className="text-xs text-[#9ca3af]">via {i.canal}</span>
+                    <span className="text-xs text-[#9ca3af] ml-auto">
                       {new Date(i.criado_em).toLocaleString('pt-BR')}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">{i.descricao}</p>
+                  <p className="text-sm text-[#6b7280]">{i.descricao}</p>
                 </div>
               </div>
             ))}
@@ -304,44 +312,29 @@ export default function PerfilPacientePage() {
       </div>
 
       {showInteracao && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-[#1a2744] mb-4">Nova Interação</h3>
-            <form onSubmit={handleAddInteracao} className="space-y-3">
-              <select
-                value={novaInteracao.tipo}
-                onChange={(e) => setNovaInteracao({ ...novaInteracao, tipo: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm"
-              >
+        <div className="modal-overlay" onClick={() => setShowInteracao(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3 className="section-title mb-5">Nova Interação</h3>
+            <form onSubmit={handleAddInteracao} className="space-y-4">
+              <select value={novaInteracao.tipo} onChange={(e) => setNovaInteracao({ ...novaInteracao, tipo: e.target.value })}
+                className="input-field">
                 <option value="mensagem">Mensagem</option>
                 <option value="ligacao">Ligação</option>
                 <option value="agendamento">Agendamento</option>
                 <option value="retorno">Retorno</option>
               </select>
-              <select
-                value={novaInteracao.canal}
-                onChange={(e) => setNovaInteracao({ ...novaInteracao, canal: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm"
-              >
+              <select value={novaInteracao.canal} onChange={(e) => setNovaInteracao({ ...novaInteracao, canal: e.target.value })}
+                className="input-field">
                 <option value="whatsapp">WhatsApp</option>
                 <option value="telefone">Telefone</option>
                 <option value="presencial">Presencial</option>
               </select>
-              <textarea
-                placeholder="Descrição da interação..."
-                required
-                value={novaInteracao.descricao}
+              <textarea placeholder="Descrição da interação…" required value={novaInteracao.descricao}
                 onChange={(e) => setNovaInteracao({ ...novaInteracao, descricao: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1a2744] resize-none"
-                rows={3}
-              />
-              <div className="flex gap-2 pt-2">
-                <button type="button" onClick={() => setShowInteracao(false)} className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">
-                  Cancelar
-                </button>
-                <button type="submit" className="flex-1 bg-[#1a2744] text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#2a3f66]">
-                  Registrar
-                </button>
+                className="input-field resize-none" rows={3} />
+              <div className="flex gap-2.5 pt-2">
+                <button type="button" onClick={() => setShowInteracao(false)} className="btn-secondary flex-1">Cancelar</button>
+                <button type="submit" className="btn-primary flex-1">Registrar</button>
               </div>
             </form>
           </div>
@@ -349,60 +342,40 @@ export default function PerfilPacientePage() {
       )}
 
       {showAtendimento && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-[#1a2744] mb-4">Novo Atendimento</h3>
-            <form onSubmit={handleAddAtendimento} className="space-y-3">
-              <select
-                value={novoAtendimento.tipo_exame}
+        <div className="modal-overlay" onClick={() => setShowAtendimento(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3 className="section-title mb-5">Novo Atendimento</h3>
+            <form onSubmit={handleAddAtendimento} className="space-y-4">
+              <select value={novoAtendimento.tipo_exame}
                 onChange={(e) => setNovoAtendimento({ ...novoAtendimento, tipo_exame: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm"
-              >
-                {EXAMES.map((e) => (
-                  <option key={e.id} value={e.nome}>{e.nome}</option>
-                ))}
+                className="input-field">
+                {EXAMES.map((e) => (<option key={e.id} value={e.nome}>{e.nome}</option>))}
               </select>
-              <select
-                value={novoAtendimento.status}
+              <select value={novoAtendimento.status}
                 onChange={(e) => setNovoAtendimento({ ...novoAtendimento, status: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm"
-              >
+                className="input-field">
                 <option value="lead">Lead</option>
                 <option value="agendado">Agendado</option>
                 <option value="realizado">Realizado</option>
                 <option value="cancelado">Cancelado</option>
               </select>
-              <input
-                type="datetime-local"
-                value={novoAtendimento.data_agendamento}
+              <input type="datetime-local" value={novoAtendimento.data_agendamento}
                 onChange={(e) => setNovoAtendimento({ ...novoAtendimento, data_agendamento: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm"
-              />
-              <input
-                type="number"
-                step="0.01"
-                placeholder="Valor"
-                value={novoAtendimento.valor}
+                className="input-field" />
+              <input type="number" step="0.01" placeholder="Valor" value={novoAtendimento.valor}
                 onChange={(e) => setNovoAtendimento({ ...novoAtendimento, valor: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm"
-              />
-              <select
-                value={novoAtendimento.origem}
+                className="input-field" />
+              <select value={novoAtendimento.origem}
                 onChange={(e) => setNovoAtendimento({ ...novoAtendimento, origem: e.target.value })}
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm"
-              >
+                className="input-field">
                 <option value="whatsapp">WhatsApp</option>
                 <option value="instagram">Instagram</option>
                 <option value="indicacao">Indicação</option>
                 <option value="site">Site</option>
               </select>
-              <div className="flex gap-2 pt-2">
-                <button type="button" onClick={() => setShowAtendimento(false)} className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">
-                  Cancelar
-                </button>
-                <button type="submit" className="flex-1 bg-[#1a2744] text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#2a3f66]">
-                  Criar
-                </button>
+              <div className="flex gap-2.5 pt-2">
+                <button type="button" onClick={() => setShowAtendimento(false)} className="btn-secondary flex-1">Cancelar</button>
+                <button type="submit" className="btn-primary flex-1">Criar</button>
               </div>
             </form>
           </div>

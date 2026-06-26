@@ -9,12 +9,14 @@ export default function ToasterProvider() {
       toastOptions={{
         duration: 4000,
         style: {
-          borderRadius: '8px',
-          background: '#1a2744',
+          borderRadius: '10px',
+          background: '#0f3b5e',
           color: '#fff',
           fontSize: '14px',
+          fontFamily: "'DM Sans', sans-serif",
+          padding: '12px 16px',
         },
-        success: { iconTheme: { primary: '#22c55e', secondary: '#fff' } },
+        success: { iconTheme: { primary: '#2dd4bf', secondary: '#fff' } },
         error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
       }}
     />
