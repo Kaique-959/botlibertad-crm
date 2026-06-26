@@ -52,16 +52,14 @@ export default function Sidebar() {
         `}
       >
         <div className="p-6 border-b border-gray-100 min-w-64 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-[#0f3b5e] p-2.5 rounded-xl shadow-sm shrink-0">
-              <Stethoscope size={22} className="text-white" />
-            </div>
+          <div className="flex items-center gap-2.5">
+            <Stethoscope size={20} className="text-[#0f3b5e] shrink-0" />
             <div>
-              <h1 className="text-lg font-bold text-gray-900 leading-tight">
-                BotLibertad
+              <h1 className="text-base font-bold text-gray-900 leading-tight">
+                CRM Instituto Libertad
               </h1>
               <p className="text-[11px] text-gray-400 font-medium uppercase tracking-widest">
-                CRM Clínica
+                Clínica de Fonoaudiologia
               </p>
             </div>
           </div>
@@ -85,11 +83,11 @@ export default function Sidebar() {
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
                   isActive
-                    ? 'bg-[#0f3b5e] text-white shadow-md shadow-[#0f3b5e]/20'
+                    ? 'bg-[#eef2f7] text-[#0f3b5e] font-semibold'
                     : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                 }`}
               >
-                <Icon size={18} className={`shrink-0 ${isActive ? 'text-white' : 'text-gray-400'}`} />
+                <Icon size={18} className={`shrink-0 ${isActive ? 'text-[#0f3b5e]' : 'text-gray-400'}`} />
                 <span>{link.label}</span>
               </Link>
             )
