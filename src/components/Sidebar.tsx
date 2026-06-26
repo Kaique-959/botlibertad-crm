@@ -31,7 +31,7 @@ export default function Sidebar() {
 
   async function handleLogout() {
     await getSupabaseBrowser().auth.signOut()
-    router.push('/login')
+    window.location.href = '/login'
   }
 
   return (

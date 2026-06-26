@@ -16,7 +16,9 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
 
-    const { error } = await getSupabaseBrowser().auth.signInWithPassword({
+    const supabase = getSupabaseBrowser()
+
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
@@ -28,7 +30,7 @@ export default function LoginPage() {
     }
 
     toast.success('Login realizado!')
-    router.push('/dashboard')
+    window.location.href = '/dashboard'
   }
 
   return (
