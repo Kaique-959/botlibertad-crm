@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { getSupabaseBrowser } from '@/lib/supabase'
+import { useSidebar } from '@/lib/sidebar-context'
 import {
   LayoutDashboard,
   Users,
@@ -12,7 +12,7 @@ import {
   LogOut,
   Stethoscope,
 } from 'lucide-react'
-import { useSidebar } from '@/lib/sidebar-context'
+import Link from 'next/link'
 
 const links = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -43,14 +43,10 @@ export default function Sidebar() {
       )}
 
       <aside
-        className={`
-          h-screen bg-white border-r border-gray-200 flex flex-col
-          transition-all duration-300 ease-in-out overflow-hidden shrink-0
-          ${open ? 'w-64' : 'w-0'}
-          lg:w-64
-        `}
+        style={{ width: open ? '16rem' : '0rem' }}
+        className="h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out overflow-hidden shrink-0 lg:!w-64"
       >
-        <div className="p-6 border-b border-gray-100 min-w-64 flex items-center justify-between">
+        <div className="p-6 border-b border-gray-100 flex items-center shrink-0" style={{ width: '16rem' }}>
           <div className="flex items-center gap-2.5">
             <Stethoscope size={20} className="text-[#0f3b5e] shrink-0" />
             <div>
@@ -64,7 +60,7 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto min-w-64">
+        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto" style={{ width: '16rem' }}>
           {links.map((link) => {
             const Icon = link.icon
             const isActive = pathname === link.href || pathname.startsWith(link.href + '/')
@@ -86,7 +82,7 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="p-3 border-t border-gray-100 min-w-64">
+        <div className="p-3 border-t border-gray-100" style={{ width: '16rem' }}>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 w-full transition-all duration-150"
