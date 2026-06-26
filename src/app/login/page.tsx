@@ -30,24 +30,24 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#faf9f7] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-sm">
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0f3b5e] rounded-2xl mb-5 shadow-lg shadow-[#0f3b5e]/10">
-            <Stethoscope size={32} className="text-[#2dd4bf]" />
+            <Stethoscope size={30} className="text-white" />
           </div>
-          <h1 className="text-3xl text-[#0f3b5e]" style={{ fontFamily: "'DM Serif Display', serif" }}>
+          <h1 className="text-3xl text-[#0f3b5e] font-serif">
             BotLibertad
           </h1>
-          <p className="text-[15px] text-[#6b7280] mt-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            CRM da Clínica
+          <p className="text-sm text-gray-500 mt-1.5">
+            CRM da Clínica de Fonoaudiologia
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-[#eae7e2] p-8 shadow-sm">
+        <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-[#1a1a2e] mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Email
               </label>
               <input
@@ -61,7 +61,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1a1a2e] mb-1.5">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Senha
               </label>
               <input
@@ -77,15 +77,15 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-3 text-base"
+              className="btn-primary w-full justify-center py-2.5 text-sm"
             >
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-xs text-[#9ca3af] mt-6">
-          Clínica de Fonoaudiologia — Dra. Libertad Ramirez
+        <p className="text-center text-xs text-gray-400 mt-6">
+          Dra. Libertad Ramirez — Fonoaudiologia
         </p>
       </div>
     </div>

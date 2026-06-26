@@ -13,6 +13,7 @@ import {
   Stethoscope,
   Menu,
   X,
+  ChevronRight,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -38,7 +39,7 @@ export default function Sidebar() {
   return (
     <>
       <button
-        className="fixed top-4 left-4 z-50 lg:hidden bg-white p-2.5 rounded-xl shadow-md border border-[#eae7e2]"
+        className="fixed top-4 left-4 z-50 lg:hidden bg-white p-2.5 rounded-xl shadow-lg border border-gray-200"
         onClick={() => setOpen(!open)}
         aria-label="Menu"
       >
@@ -47,58 +48,68 @@ export default function Sidebar() {
 
       {open && (
         <div
-          className="fixed inset-0 bg-[#0f3b5e]/20 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={() => setOpen(false)}
         />
       )}
 
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-[#0f3b5e] flex flex-col transition-transform duration-300 ease-out ${
+        className={`fixed lg:sticky inset-y-0 left-0 z-40 w-64 h-screen bg-white border-r border-gray-200 flex flex-col transition-transform duration-300 ease-out shadow-sm ${
           open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div className="p-7 border-b border-white/8">
-          <div className="flex items-center gap-3.5">
-            <div className="bg-white/10 p-2.5 rounded-xl">
-              <Stethoscope size={22} className="text-[#2dd4bf]" />
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex items-center gap-3">
+            <div className="bg-[#0f3b5e] p-2.5 rounded-xl shadow-sm">
+              <Stethoscope size={22} className="text-white" />
             </div>
             <div>
-              <h1 className="text-lg leading-tight" style={{ fontFamily: "'DM Serif Display', serif" }}>
+              <h1 className="text-lg font-bold text-gray-900 leading-tight">
                 BotLibertad
               </h1>
-              <p className="text-[11px] text-white/50 font-medium tracking-wide uppercase">CRM Clínica</p>
+              <p className="text-[11px] text-gray-400 font-medium uppercase tracking-widest">
+                CRM Clínica
+              </p>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-3.5 space-y-0.5">
+        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
           {links.map((link) => {
             const Icon = link.icon
-            const active = pathname === link.href || pathname.startsWith(link.href + '/')
+            const isActive = pathname === link.href || pathname.startsWith(link.href + '/')
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  active
-                    ? 'bg-white/10 text-white shadow-sm'
-                    : 'text-white/55 hover:text-white hover:bg-white/5'
+                className={`group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+                  isActive
+                    ? 'bg-[#0f3b5e] text-white shadow-md shadow-[#0f3b5e]/20'
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                 }`}
               >
-                <Icon size={18} className={active ? 'text-[#2dd4bf]' : ''} />
-                {link.label}
+                <Icon
+                  size={18}
+                  className={`transition-colors duration-150 ${
+                    isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'
+                  }`}
+                />
+                <span className="flex-1">{link.label}</span>
+                {isActive && (
+                  <ChevronRight size={14} className="text-white/60" />
+                )}
               </Link>
             )
           })}
         </nav>
 
-        <div className="p-3.5 border-t border-white/8">
+        <div className="p-3 border-t border-gray-100">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-white/50 hover:text-white hover:bg-white/5 w-full transition-all duration-200"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 w-full transition-all duration-150"
           >
-            <LogOut size={18} />
+            <LogOut size={18} className="text-gray-400" />
             Sair
           </button>
         </div>

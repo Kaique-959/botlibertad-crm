@@ -17,9 +17,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <ToasterProvider />
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen bg-gray-50">
           <Sidebar />
-          <main className="flex-1 ml-0 lg:ml-64 min-h-screen bg-[#faf9f7]">
+          <main className="flex-1 min-w-0">
             <div className="p-6 lg:p-10 max-w-7xl mx-auto">
               {children}
             </div>
